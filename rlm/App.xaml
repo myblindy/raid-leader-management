@@ -1,0 +1,9 @@
+﻿<Application x:Class="rlm.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:rlm" xmlns:converters="clr-namespace:rlm.Converters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <converters:NameToImageSourceConverter x:Key="NameToImageSourceConverter"/>
+    </Application.Resources>
+</Application>

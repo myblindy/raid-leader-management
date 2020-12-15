@@ -1,0 +1,38 @@
+﻿<reactiveui:ReactiveWindow x:Class="rlm.MainWindow"
+        x:TypeArguments="viewmodels:MainViewModel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:reactiveui="http://reactiveui.net"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:rlm" 
+        xmlns:viewmodels="clr-namespace:rlm.ViewModels" 
+        Title="MainWindow">
+    <DockPanel LastChildFill="True">
+        <ListBox x:Name="RaiderList" DockPanel.Dock="Left" ItemsSource="{Binding Raiders}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                        <ItemsControl ItemsSource="{Binding Traits}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Name, Converter={StaticResource NameToImageSourceConverter}}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Orientation="Vertical" DataContext="{Binding SelectedItem, ElementName=RaiderList}">
+            <TextBlock Text="{Binding Name, StringFormat='Name: {0}'}"/>
+            <TextBlock Text="{Binding TotalStats.Reflexes, StringFormat='Reflexes: {0}'}"/>
+            <TextBlock Text="{Binding TotalStats.Intelligence, StringFormat='Intelligence: {0}'}"/>
+        </StackPanel>
+    </DockPanel>
+</reactiveui:ReactiveWindow>
