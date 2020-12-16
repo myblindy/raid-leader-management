@@ -33,11 +33,17 @@
                     </DataGrid.Resources>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" ElementStyle="{StaticResource LeftCellStyle}" />
+                        <DataGridTemplateColumn Header="Role" SortMemberPath="Specialization.Role">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Specialization.Role, Converter={StaticResource NameToImageSourceConverter}}" MaxHeight="24"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Class">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock VerticalAlignment="Center">
-                                        <Image Source="{Binding Specialization.Role, Converter={StaticResource NameToImageSourceConverter}}" MaxHeight="24"/>
                                         <Run Text="{Binding Specialization.Name}" BaselineAlignment="Center"/>
                                         <Run Text="{Binding Class.Name}" BaselineAlignment="Center"/>
                                     </TextBlock>
