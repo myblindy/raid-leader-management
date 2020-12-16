@@ -14,6 +14,7 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.ColumnSpan="3" Text="{Binding Name}" Margin="0,0,0,10" />
@@ -25,6 +26,10 @@
                 <TextBlock Grid.Row="2" Grid.Column="0" Visibility="{Binding Stats.Intelligence, Converter={StaticResource VisibleIfNonZeroConverter}}">Intelligence:</TextBlock>
                 <TextBlock Grid.Row="2" Grid.Column="1" Visibility="{Binding Stats.Intelligence, Converter={StaticResource VisibleIfNonZeroConverter}}" 
                            Margin="10,0,0,0" Text="{Binding Stats.Intelligence}" HorizontalAlignment="Right" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Visibility="{Binding Stats.Charisma, Converter={StaticResource VisibleIfNonZeroConverter}}">Charisma:</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="1" Visibility="{Binding Stats.Charisma, Converter={StaticResource VisibleIfNonZeroConverter}}" 
+                           Margin="10,0,0,0" Text="{Binding Stats.Charisma}" HorizontalAlignment="Right" />
             </Grid>
         </Image.ToolTip>
     </Image>

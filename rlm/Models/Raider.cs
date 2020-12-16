@@ -27,11 +27,10 @@ namespace rlm.Models
             this.WhenAnyObservable(x => x.Stats.Changed).Subscribe(w => UpdateTotalStats());
             Traits.ToObservableChangeSet(x => x)
                 .ToCollection()
-                //.Select(items => items.Any())
                 .Subscribe(w => UpdateTotalStats());
         }
 
         private void UpdateTotalStats() =>
-            TotalStats.SetTotal(Traits.Select(t => t.Stats).Concat(Enumerable.Repeat(Stats, 1)));
+            TotalStats.SetTotal(Traits.Select(t => t.Stats).Append(Stats));
     }
 }

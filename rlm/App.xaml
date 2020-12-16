@@ -6,5 +6,6 @@
     <Application.Resources>
         <converters:NameToImageSourceConverter x:Key="NameToImageSourceConverter"/>
         <converters:VisibleIfNonZeroConverter x:Key="VisibleIfNonZeroConverter"/>
+        <converters:RunningToButtonTextConverter x:Key="RunningToButtonTextConverter"/>
     </Application.Resources>
 </Application>

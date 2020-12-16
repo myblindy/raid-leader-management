@@ -15,7 +15,10 @@ namespace rlm.Models
         double intelligence;
         public double Intelligence { get => intelligence; set => this.RaiseAndSetIfChanged(ref intelligence, value); }
 
+        double charisma;
+        public double Charisma { get => charisma; set => this.RaiseAndSetIfChanged(ref charisma, value); }
+
         public void SetTotal(IEnumerable<Stats> stats) =>
-            (Reflexes, Intelligence) = (stats.Sum(s => s.Reflexes), stats.Sum(s => s.Intelligence));
+            (Reflexes, Intelligence, Charisma) = (stats.Sum(s => s.Reflexes), stats.Sum(s => s.Intelligence), stats.Sum(s => s.Charisma));
     }
 }
