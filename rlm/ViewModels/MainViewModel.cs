@@ -21,6 +21,23 @@ namespace rlm.ViewModels
                 new() { Name = "Smooth", Stats = { Charisma = 5 } },
             }.ToDictionary(w => w.Name);
 
+        public Dictionary<string, Class> AllClasses =
+            new Class[]
+            {
+                new("Fighter",
+                    new Specialization( "Brawler", RaiderRoles.MeleeDamage ),
+                    new Specialization( "Protector", RaiderRoles.Tank ),
+                    new Specialization( "Weaponeer", RaiderRoles.MeleeDamage )),
+                new("Cleric",
+                    new Specialization( "Holy", RaiderRoles.Healer ),
+                    new Specialization( "Shadow", RaiderRoles.RangedDamage ),
+                    new Specialization( "Battle Cleric", RaiderRoles.MeleeDamage )),
+                new("Stabber",
+                    new Specialization( "Assassin", RaiderRoles.MeleeDamage ),
+                    new Specialization( "Thief", RaiderRoles.MeleeDamage ),
+                    new Specialization( "Arcane Shadow", RaiderRoles.RangedDamage )),
+            }.ToDictionary(w => w.Name);
+
         public ObservableCollection<Raider> Raiders { get; }
 
         DateTime currentDate = new(2004, 11, 23);
@@ -29,7 +46,7 @@ namespace rlm.ViewModels
         bool running;
         public bool Running { get => running; set => this.RaiseAndSetIfChanged(ref running, value); }
 
-        int runSpeed;
+        int runSpeed = 1;
         public int RunSpeed { get => runSpeed; set => this.RaiseAndSetIfChanged(ref runSpeed, value); }
 
         public ICommand RunToggleCommand { get; }
@@ -38,9 +55,9 @@ namespace rlm.ViewModels
         {
             Raiders = new()
             {
-                new() { Name = "John", Traits = { AllTraits["Analytical"], AllTraits["Wired"] } },
-                new() { Name = "Timmy", Traits = { AllTraits["Smooth"] } },
-                new() { Name = "Alice", Traits = { AllTraits["Slow"] } },
+                new("John", "Fighter", "Protector", AllClasses) { Traits = { AllTraits["Analytical"], AllTraits["Wired"] } },
+                new("Timmy", "Stabber", "Arcane Shadow", AllClasses) { Traits = { AllTraits["Smooth"] } },
+                new("Alice", "Cleric", "Holy", AllClasses) { Traits = { AllTraits["Slow"] } },
             };
 
             RunToggleCommand = ReactiveCommand.Create(() => Running = !Running);

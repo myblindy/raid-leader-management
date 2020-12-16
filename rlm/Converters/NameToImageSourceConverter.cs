@@ -14,7 +14,7 @@ namespace rlm.Converters
     class NameToImageSourceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            value is string name ? new BitmapImage(new($"pack://application:,,,/Images/{name}.png")) : DependencyProperty.UnsetValue;
+            value is not null ? new BitmapImage(new($"pack://application:,,,/Images/{value}.png")) : DependencyProperty.UnsetValue;
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
