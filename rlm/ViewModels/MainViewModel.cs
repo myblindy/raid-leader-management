@@ -1,8 +1,10 @@
-﻿using ReactiveUI;
+﻿using DynamicData;
+using ReactiveUI;
 using rlm.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,38 +14,26 @@ namespace rlm.ViewModels
 {
     public class MainViewModel : ReactiveObject
     {
-        public Dictionary<string, Trait> AllTraits =
-            new Trait[]
-            {
-                new() { Name = "Analytical", Stats = { Intelligence = 2 } },
-                new() { Name = "Wired", Stats = { Reflexes = 4 } },
-                new() { Name = "Slow", Stats = { Reflexes = -1 } },
-                new() { Name = "Smooth", Stats = { Charisma = 5 } },
-                new() { Name = "Reckless", Stats = {Intelligence = -1, Reflexes = 2 } },
-            }.ToDictionary(w => w.Name);
+        public GlobalState GlobalState { get; } = new(
+            Trait.AllFromJsonFilePath(@"data/traits"),
+            Class.AllFromJsonFilePath(@"data/classes"),
+            File.ReadAllLines(@"data/usernames.txt").Distinct().Where(s => !string.IsNullOrWhiteSpace(s)));
 
-        public Dictionary<string, Class> AllClasses =
-            new Class[]
-            {
-                new("Fighter",
-                    new Specialization( "Brawler", RaiderRoles.MeleeDamage ),
-                    new Specialization( "Protector", RaiderRoles.Tank ),
-                    new Specialization( "Weaponeer", RaiderRoles.MeleeDamage )),
-                new("Cleric",
-                    new Specialization( "Holy", RaiderRoles.Healer ),
-                    new Specialization( "Shadow", RaiderRoles.RangedDamage ),
-                    new Specialization( "Battle", RaiderRoles.MeleeDamage )),
-                new("Stabber",
-                    new Specialization( "Assassin", RaiderRoles.MeleeDamage ),
-                    new Specialization( "Thief", RaiderRoles.MeleeDamage ),
-                    new Specialization( "Arcane Shadow", RaiderRoles.RangedDamage )),
-                new("Paladin",
-                    new Specialization( "Protector", RaiderRoles.Tank ),
-                    new Specialization( "Holy", RaiderRoles.Healer ),
-                    new Specialization( "Battle", RaiderRoles.MeleeDamage )),
-            }.ToDictionary(w => w.Name);
+        public ObservableCollection<Raider> Raiders { get; } = new();
 
-        public ObservableCollection<Raider> Raiders { get; }
+        #region Summary Counts
+        int clothCount, leatherCount, mailCount, plateCount;
+        public int ClothCount { get => clothCount; set => this.RaiseAndSetIfChanged(ref clothCount, value); }
+        public int LeatherCount { get => leatherCount; set => this.RaiseAndSetIfChanged(ref leatherCount, value); }
+        public int MailCount { get => mailCount; set => this.RaiseAndSetIfChanged(ref mailCount, value); }
+        public int PlateCount { get => plateCount; set => this.RaiseAndSetIfChanged(ref plateCount, value); }
+
+        int tankCount, healerCount, meleeDamageCount, rangedDamageCount;
+        public int TankCount { get => tankCount; set => this.RaiseAndSetIfChanged(ref tankCount, value); }
+        public int HealerCount { get => healerCount; set => this.RaiseAndSetIfChanged(ref healerCount, value); }
+        public int MeleeDamageCount { get => meleeDamageCount; set => this.RaiseAndSetIfChanged(ref meleeDamageCount, value); }
+        public int RangedDamageCount { get => rangedDamageCount; set => this.RaiseAndSetIfChanged(ref rangedDamageCount, value); }
+        #endregion
 
         DateTime currentDate = new(2004, 11, 23);
         public DateTime CurrentDate { get => currentDate; set => this.RaiseAndSetIfChanged(ref currentDate, value); }
@@ -58,13 +48,31 @@ namespace rlm.ViewModels
 
         public MainViewModel()
         {
-            Raiders = new()
+            Raiders.AddRange(Raider.CreateRaiders(tankRange: 2..5, healerRange: 7..12, damageDealerRange: 25..35, traitRange: 0..4, ilvlRange: 45..65, GlobalState));
+            Raiders.AsObservableChangeSet().Subscribe(w =>
             {
-                new("John", "Fighter", "Protector", AllClasses) { Traits = { AllTraits["Analytical"], AllTraits["Wired"] } },
-                new("Thomas", "Paladin", "Protector", AllClasses) { Traits = { AllTraits["Reckless"], AllTraits["Wired"] } },
-                new("Timmy", "Stabber", "Arcane Shadow", AllClasses) { Traits = { AllTraits["Smooth"] } },
-                new("Alice", "Cleric", "Holy", AllClasses) { Traits = { AllTraits["Slow"] } },
-            };
+                ClothCount = LeatherCount = MailCount = PlateCount = HealerCount = TankCount = MeleeDamageCount = RangedDamageCount = 0;
+
+                foreach (var raider in Raiders.Where(r => r.Specialization is not null))
+                {
+                    switch (raider.Specialization.ArmorType)
+                    {
+                        case ArmorType.Cloth: ++ClothCount; break;
+                        case ArmorType.Leather: ++LeatherCount; break;
+                        case ArmorType.Mail: ++MailCount; break;
+                        case ArmorType.Plate: ++PlateCount; break;
+                        default: throw new InvalidOperationException();
+                    }
+                    switch (raider.Specialization.Role)
+                    {
+                        case Roles.Healer: ++HealerCount; break;
+                        case Roles.Tank: ++TankCount; break;
+                        case Roles.MeleeDamage: ++MeleeDamageCount; break;
+                        case Roles.RangedDamage: ++RangedDamageCount; break;
+                        default: throw new InvalidOperationException();
+                    }
+                }
+            });
 
             RunToggleCommand = ReactiveCommand.Create(() => Running = !Running);
         }

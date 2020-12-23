@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/class_schema.json",
+  "name": "Cleric",
+  "specializations": [
+    {
+      "name": "Holy",
+      "role": "healer",
+      "armorType": "cloth",
+      "mainHandWeaponType": "oneHandCasterRanged",
+      "offHandWeaponType": "casterFocus"
+    },
+    {
+      "name": "Shadow",
+      "role": "rangedDamage",
+      "armorType": "cloth",
+      "mainHandWeaponType": "oneHandCasterRanged",
+      "offHandWeaponType": "casterFocus"
+    },
+    {
+      "name": "Battle",
+      "role": "meleeDamage",
+      "armorType": "cloth",
+      "mainHandWeaponType": "oneHandCasterMelee",
+      "offHandWeaponType": "casterFocus"
+    }
+  ]
+}

@@ -18,16 +18,45 @@
             <StackPanel Orientation="Horizontal"/>
         </DockPanel>
 
+        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
+            <StatusBarItem DockPanel.Dock="Right">
+                <TextBlock Text="{Binding RangedDamageCount, StringFormat='Ranged DDs: {0}'}"/>
+            </StatusBarItem>
+            <StatusBarItem DockPanel.Dock="Right">
+                <TextBlock Text="{Binding MeleeDamageCount, StringFormat='Melee DDs: {0}'}"/>
+            </StatusBarItem>
+            <StatusBarItem DockPanel.Dock="Right">
+                <TextBlock Text="{Binding HealerCount, StringFormat='Healers: {0}'}"/>
+            </StatusBarItem>
+            <StatusBarItem DockPanel.Dock="Right">
+                <TextBlock Text="{Binding TankCount, StringFormat='Tanks: {0}'}"/>
+            </StatusBarItem>
+            <Separator DockPanel.Dock="Right"/>
+            <StatusBarItem DockPanel.Dock="Right">
+                <TextBlock Text="{Binding PlateCount, StringFormat='Plates: {0}'}"/>
+            </StatusBarItem>
+            <StatusBarItem DockPanel.Dock="Right">
+                <TextBlock Text="{Binding MailCount, StringFormat='Mails: {0}'}"/>
+            </StatusBarItem>
+            <StatusBarItem DockPanel.Dock="Right">
+                <TextBlock Text="{Binding LeatherCount, StringFormat='Leathers: {0}'}"/>
+            </StatusBarItem>
+            <StatusBarItem DockPanel.Dock="Right">
+                <TextBlock Text="{Binding ClothCount, StringFormat='Cloths: {0}'}"/>
+            </StatusBarItem>
+            <StatusBarItem/>
+        </StatusBar>
+
         <TabControl>
             <TabItem Header="Guild Roster">
-                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Raiders}" IsReadOnly="True" GridLinesVisibility="None" HeadersVisibility="Column" SelectionMode="Single" ClipboardCopyMode="IncludeHeader">
+                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Raiders}" IsReadOnly="True" GridLinesVisibility="Vertical" HeadersVisibility="Column" SelectionMode="Single" ClipboardCopyMode="IncludeHeader">
                     <DataGrid.Resources>
-                        <Style TargetType="{x:Type TextBlock}" x:Key="RightCellStyle">
+                        <Style TargetType="TextBlock" x:Key="RightCellStyle">
                             <Setter Property="HorizontalAlignment" Value="Stretch"/>
                             <Setter Property="TextAlignment" Value="Right"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
-                        <Style TargetType="{x:Type TextBlock}" x:Key="LeftCellStyle">
+                        <Style TargetType="TextBlock" x:Key="LeftCellStyle">
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGrid.Resources>
@@ -50,6 +79,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Armor Type" Binding="{Binding Specialization.ArmorType}" ElementStyle="{StaticResource LeftCellStyle}" />
+                        <DataGridTextColumn Header="Right Weapon" Binding="{Binding Specialization.MainHandWeaponType}" ElementStyle="{StaticResource LeftCellStyle}" />
+                        <DataGridTextColumn Header="Left Weapon" Binding="{Binding Specialization.OffHandWeaponType}" ElementStyle="{StaticResource LeftCellStyle}" />
+                        <DataGridTextColumn Header="ILvl" Binding="{Binding AverageItemLevel, StringFormat=0.0}" ElementStyle="{StaticResource RightCellStyle}" />
                         <DataGridTextColumn Header="Reflexes" Binding="{Binding TotalStats.Reflexes}" ElementStyle="{StaticResource RightCellStyle}" />
                         <DataGridTextColumn Header="Intelligence" Binding="{Binding TotalStats.Intelligence}" ElementStyle="{StaticResource RightCellStyle}" />
                         <DataGridTextColumn Header="Charisma" Binding="{Binding TotalStats.Charisma}" ElementStyle="{StaticResource RightCellStyle}" />

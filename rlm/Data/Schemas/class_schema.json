@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "JSON Schema for a class definition",
+
+  "type": "object",
+
+  "definitions": {
+    "weaponType": {
+      "type": "string",
+      "enum": [
+        "none",
+
+        "oneHandPhysicalMelee",
+        "oneHandCasterMelee",
+        "oneHandPhysicalRanged",
+        "oneHandCasterRanged",
+        "tankShield",
+        "casterShield",
+        "casterFocus",
+
+        "twoHandPhysicalMelee",
+        "twoHandPhysicalRanged",
+        "twoHandCasterMelee",
+        "twoHandCasterRanged"
+      ]
+    }
+  },
+
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "specializations": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [ "tank", "healer", "meleeDamage", "rangedDamage" ]
+          },
+          "armorType": {
+            "type": "string",
+            "enum": [ "cloth", "leather", "mail", "plate" ]
+          },
+          "mainHandWeaponType": { "$ref": "#/definitions/weaponType" },
+          "offHandWeaponType": { "$ref": "#/definitions/weaponType" }
+        },
+        "required": [ "name", "role", "armorType", "mainHandWeaponType", "offHandWeaponType" ]
+      }
+    }
+  },
+
+  "required": [ "name", "specializations" ]
+}

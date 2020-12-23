@@ -1,0 +1,5 @@
+{
+  "$schema": "../schemas/trait_schema.json",
+  "name": "Analytical",
+  "stats": { "intelligence": 2 }
+}

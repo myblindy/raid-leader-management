@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/class_schema.json",
+  "name": "Paladin",
+  "specializations": [
+    {
+      "name": "Protector",
+      "role": "tank",
+      "armorType": "plate",
+      "mainHandWeaponType": "oneHandPhysicalMelee",
+      "offHandWeaponType": "tankShield"
+    },
+    {
+      "name": "Holy",
+      "role": "healer",
+      "armorType": "plate",
+      "mainHandWeaponType": "oneHandCasterMelee",
+      "offHandWeaponType": "casterShield"
+    },
+    {
+      "name": "Battle",
+      "role": "meleeDamage",
+      "armorType": "plate",
+      "mainHandWeaponType": "twoHandPhysicalMelee",
+      "offHandWeaponType": "none"
+    }
+  ]
+}

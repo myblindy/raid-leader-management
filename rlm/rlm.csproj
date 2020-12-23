@@ -16,7 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\*" />
+    <None Update="Data\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

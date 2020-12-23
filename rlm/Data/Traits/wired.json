@@ -1,0 +1,5 @@
+{
+  "$schema": "../schemas/trait_schema.json",
+  "name": "Wired",
+  "stats": { "reflexes": 4 }
+}

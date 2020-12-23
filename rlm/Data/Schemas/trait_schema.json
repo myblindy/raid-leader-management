@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "JSON Schema for traits",
+
+  "type": "object",
+
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "stats": {
+      "type": "object",
+      "properties": {
+        "reflexes": { "type": "number" },
+        "intelligence": { "type": "number" },
+        "charisma": { "type": "number" }
+      }
+    }
+  },
+
+  "required": [ "name" ]
+}

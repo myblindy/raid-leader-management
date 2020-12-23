@@ -1,0 +1,5 @@
+{
+  "$schema": "../schemas/trait_schema.json",
+  "name": "Reckless",
+  "stats": { "intelligence": -1, "reflexes": 2 }
+}
