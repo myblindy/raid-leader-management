@@ -6,20 +6,25 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace rlm.ViewModels
 {
-    public class MainViewModel : ReactiveObject
+    public class MainViewModel : ReactiveObject, IActivatableViewModel
     {
         public GlobalState GlobalState { get; } = new(
             Trait.AllFromJsonFilePath(@"data/traits"),
             Class.AllFromJsonFilePath(@"data/classes"),
-            File.ReadAllLines(@"data/usernames.txt").Distinct().Where(s => !string.IsNullOrWhiteSpace(s)));
+            File.ReadAllLines(@"data/user_names.txt").Distinct().Where(s => !string.IsNullOrWhiteSpace(s)),
+            File.ReadAllLines(@"data/encounter_names.txt").Distinct().Where(s => !string.IsNullOrWhiteSpace(s)),
+            EncounterMechanic.AllFromJsonFilePath(@"data/mechanics"));
 
         public ObservableCollection<Raider> Raiders { get; } = new();
+
+        public ObservableCollection<Raid> Raids { get; } = new();
 
         #region Summary Counts
         int clothCount, leatherCount, mailCount, plateCount;
@@ -46,32 +51,39 @@ namespace rlm.ViewModels
 
         public ICommand RunToggleCommand { get; }
 
+        public ViewModelActivator Activator { get; } = new();
+
         public MainViewModel()
         {
             Raiders.AddRange(Raider.CreateRaiders(tankRange: 2..5, healerRange: 7..12, damageDealerRange: 25..35, traitRange: 0..4, ilvlRange: 45..65, GlobalState));
-            Raiders.AsObservableChangeSet().Subscribe(w =>
-            {
-                ClothCount = LeatherCount = MailCount = PlateCount = HealerCount = TankCount = MeleeDamageCount = RangedDamageCount = 0;
+            Raids.Add(new(encounters: 6..12, encounterMechanics: 2..6, GlobalState));
 
-                foreach (var raider in Raiders.Where(r => r.Specialization is not null))
+            this.WhenActivated(disposables =>
+            {
+                Raiders.AsObservableChangeSet().Subscribe(w =>
                 {
-                    switch (raider.Specialization.ArmorType)
+                    ClothCount = LeatherCount = MailCount = PlateCount = HealerCount = TankCount = MeleeDamageCount = RangedDamageCount = 0;
+
+                    foreach (var raider in Raiders.Where(r => r.Specialization is not null))
                     {
-                        case ArmorType.Cloth: ++ClothCount; break;
-                        case ArmorType.Leather: ++LeatherCount; break;
-                        case ArmorType.Mail: ++MailCount; break;
-                        case ArmorType.Plate: ++PlateCount; break;
-                        default: throw new InvalidOperationException();
+                        switch (raider.Specialization.ArmorType)
+                        {
+                            case ArmorType.Cloth: ++ClothCount; break;
+                            case ArmorType.Leather: ++LeatherCount; break;
+                            case ArmorType.Mail: ++MailCount; break;
+                            case ArmorType.Plate: ++PlateCount; break;
+                            default: throw new InvalidOperationException();
+                        }
+                        switch (raider.Specialization.Role)
+                        {
+                            case Roles.Healer: ++HealerCount; break;
+                            case Roles.Tank: ++TankCount; break;
+                            case Roles.MeleeDamage: ++MeleeDamageCount; break;
+                            case Roles.RangedDamage: ++RangedDamageCount; break;
+                            default: throw new InvalidOperationException();
+                        }
                     }
-                    switch (raider.Specialization.Role)
-                    {
-                        case Roles.Healer: ++HealerCount; break;
-                        case Roles.Tank: ++TankCount; break;
-                        case Roles.MeleeDamage: ++MeleeDamageCount; break;
-                        case Roles.RangedDamage: ++RangedDamageCount; break;
-                        default: throw new InvalidOperationException();
-                    }
-                }
+                }).DisposeWith(disposables);
             });
 
             RunToggleCommand = ReactiveCommand.Create(() => Running = !Running);

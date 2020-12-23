@@ -15,7 +15,7 @@ namespace rlm.Converters
 {
     class NameToImageSourceConverter : IValueConverter
     {
-        static readonly string ApplicationPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        static readonly string ApplicationPath = AppContext.BaseDirectory;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
             value is not null ? new BitmapImage(new(Path.Combine(ApplicationPath, @$"Data\Images\{value}.png"))) : DependencyProperty.UnsetValue;
 

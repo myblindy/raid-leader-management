@@ -1,0 +1,10 @@
+{
+  "$schema": "../schemas/mechanics_schema.json",
+  "name": "Mind Control",
+  "difficulty": 30,
+  "rate": "rare",
+  "targetRoles": [ "tank", "meleeDamage", "healer", "rangedDamage" ],
+  "targetCount": "one",
+  "failureCheckRoles": [ "healer", "rangedDamage" ],
+  "failureType": "death"
+}

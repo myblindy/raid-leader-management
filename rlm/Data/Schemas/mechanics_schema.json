@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "JSON Schema for raid mechanics",
+
+  "type": "object",
+
+  "definitions": {
+    "role": {
+      "type": "string",
+      "enum": [ "tank", "meleeDamage", "rangedDamage", "healer" ]
+    }
+  },
+
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "difficulty": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Percentage at base difficulty (at same ilvl as the fight is designed for)."
+    },
+    "rate": {
+      "type": "string",
+      "enum": [ "veryRare", "rare", "normal", "often", "veryOften" ]
+    },
+    "targetRoles": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/role" }
+    },
+    "targetCount": {
+      "type": "string",
+      "enum": [ "one", "all", "few", "many" ]
+    },
+    "failureCheckRoles": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/role" }
+    },
+    "failureCheckAffectedTargets": {
+      "type": "boolean"
+    },
+    "failureType": {
+      "type": "string",
+      "enum": [ "death", "difficultyIncrease" ]
+    },
+    "failureDifficultyIncrease": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Percentage at base difficulty (at same ilvl as the fight is designed for)."
+    }
+  },
+
+  "required": [ "name", "difficulty", "failureType", "rate", "targetRoles", "targetCount" ]
+}

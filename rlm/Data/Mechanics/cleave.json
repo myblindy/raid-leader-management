@@ -1,0 +1,10 @@
+{
+  "$schema": "../schemas/mechanics_schema.json",
+  "name": "Cleave",
+  "difficulty": 10,
+  "rate": "veryOften",
+  "targetCount": "few",
+  "targetRoles": [ "tank", "meleeDamage" ],
+  "failureCheckRoles": [ "tank", "meleeDamage", "healer" ],
+  "failureType": "death"
+}

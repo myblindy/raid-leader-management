@@ -1,0 +1,10 @@
+{
+  "$schema": "../schemas/mechanics_schema.json",
+  "name": "Few Hard Adds",
+  "difficulty": 60,
+  "rate": "normal",
+  "targetCount": "all",
+  "targetRoles": [ "tank" ],
+  "failureCheckRoles": [ "tank", "meleeDamage", "healer" ],
+  "failureType": "death"
+}

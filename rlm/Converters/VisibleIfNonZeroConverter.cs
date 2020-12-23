@@ -14,6 +14,7 @@ namespace rlm.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
             value is double dValue && dValue != 0 ? Visibility.Visible :
             value is int iValue && iValue != 0 ? Visibility.Visible :
+            value is bool bValue && bValue ? Visibility.Visible :
             Visibility.Collapsed;
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

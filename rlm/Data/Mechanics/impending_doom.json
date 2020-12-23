@@ -1,0 +1,10 @@
+{
+  "$schema": "../schemas/mechanics_schema.json",
+  "name": "Impending Doom",
+  "rate": "rare",
+  "difficulty": 40,
+  "targetRoles": [ "meleeDamage" ],
+  "targetCount": "all",
+  "failureCheckRoles": [ "meleeDamage", "healer" ],
+  "failureType": "death"
+}

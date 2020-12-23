@@ -1,4 +1,5 @@
-﻿using System;
+﻿using rlm.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace rlm.Support
             AllowTrailingCommas = true,
             ReadCommentHandling = JsonCommentHandling.Skip,
             PropertyNameCaseInsensitive = true,
-            Converters = { new JsonStringEnumConverter() },
+            Converters = { new JsonStringEnumConverter(), new EnumBitFieldJsonConverter<Roles>() },
         };
     }
 }

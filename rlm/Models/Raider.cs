@@ -64,10 +64,10 @@ namespace rlm.Models
 
             while (tanks > 0 || healers > 0 || dds > 0)
             {
-                Class @class = globalState.Random.Next(globalState.AllClasses.Values);
+                Class @class = globalState.Random.Next(globalState.AllClasses);
                 string name = globalState.Random.Next(globalState.AllUserNames.Except(names));
                 var raider = new Raider(name, @class, globalState.Random.Next(@class.Specializations));
-                raider.Traits.AddRange(globalState.Random.Next(globalState.AllTraits.Values, globalState.Random.Next(traitRange.Start.Value, traitRange.End.Value)));
+                raider.Traits.AddRange(globalState.Random.Next(globalState.AllTraits, globalState.Random.Next(traitRange.Start.Value, traitRange.End.Value)));
 
                 raider.ArmorSlots.SetElements(_ => globalState.Random.Next(ilvlRange.Start.Value, ilvlRange.End.Value));
                 raider.OtherSlots.SetElements(_ => globalState.Random.Next(ilvlRange.Start.Value, ilvlRange.End.Value));

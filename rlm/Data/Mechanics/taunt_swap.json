@@ -1,0 +1,10 @@
+{
+  "$schema": "../schemas/mechanics_schema.json",
+  "name": "Taunt Swap",
+  "difficulty": 15,
+  "rate": "normal",
+  "targetCount": "all",
+  "targetRoles": [ "tank" ],
+  "failureCheckAffectedTargets": true,
+  "failureType": "death"
+}

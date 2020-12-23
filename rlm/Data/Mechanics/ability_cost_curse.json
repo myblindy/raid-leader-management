@@ -1,0 +1,11 @@
+{
+  "$schema": "../schemas/mechanics_schema.json",
+  "name": "Ability Cost Curse",
+  "difficulty": 40,
+  "rate": "often",
+  "targetRoles": [ "meleeDamage", "rangedDamage", "healer" ],
+  "targetCount": "few",
+  "failureCheckRoles": [ "healer" ],
+  "failureType": "difficultyIncrease",
+  "failureDifficultyIncrease": 2
+}

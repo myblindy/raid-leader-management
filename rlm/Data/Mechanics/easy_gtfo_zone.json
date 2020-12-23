@@ -1,0 +1,10 @@
+{
+  "$schema": "../schemas/mechanics_schema.json",
+  "name": "GTFO Zone",
+  "difficulty": 20,
+  "rate": "normal",
+  "targetCount": "few",
+  "targetRoles": [ "tank", "meleeDamage" ],
+  "failureCheckAffectedTargets": true,
+  "failureType": "death"
+}

@@ -8,23 +8,25 @@ namespace rlm.Models
 {
     public class GlobalState
     {
-        public Dictionary<string, Trait> AllTraits { get; } = new();
+        public Trait[] AllTraits { get; }
 
-        public Dictionary<string, Class> AllClasses { get; } = new();
+        public Class[] AllClasses { get; }
 
-        public List<string> AllUserNames { get; } = new();
+        public EncounterMechanic[] AllEncounterMechanics { get; }
+
+        public string[] AllUserNames { get; }
+
+        public string[] AllEncounterNames { get; }
 
         public Random Random { get; } = new();
 
-        public GlobalState(IEnumerable<Trait> traits, IEnumerable<Class> classes, IEnumerable<string> userNames)
+        public GlobalState(IEnumerable<Trait> traits, IEnumerable<Class> classes, IEnumerable<string> userNames, IEnumerable<string> encounterNames, IEnumerable<EncounterMechanic> encounterMechanics)
         {
-            foreach (var trait in traits)
-                AllTraits.Add(trait.Name, trait);
-
-            foreach (var @class in classes)
-                AllClasses.Add(@class.Name, @class);
-
-            AllUserNames.AddRange(userNames);
+            AllTraits = traits.ToArray();
+            AllClasses = classes.ToArray();
+            AllUserNames = userNames.ToArray();
+            AllEncounterMechanics = encounterMechanics.ToArray();
+            AllEncounterNames = encounterNames.ToArray();
         }
     }
 }

@@ -1,0 +1,10 @@
+{
+  "$schema": "../schemas/mechanics_schema.json",
+  "name": "Frenzy",
+  "difficulty": 80,
+  "rate": "rare",
+  "targetCount": "all",
+  "targetRoles": [ "tank" ],
+  "failureCheckRoles": [ "tank", "healer" ],
+  "failureType": "death"
+}

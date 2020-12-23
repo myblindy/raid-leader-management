@@ -1,0 +1,11 @@
+{
+  "$schema": "../schemas/mechanics_schema.json",
+  "name": "Fear",
+  "difficulty": 60,
+  "rate": "often",
+  "targetRoles": [ "rangedDamage", "meleeDamage", "healer" ],
+  "targetCount": "one",
+  "failureCheckAffectedTargets": true,
+  "failureType": "difficultyIncrease",
+  "failureDifficultyIncrease": 4
+}

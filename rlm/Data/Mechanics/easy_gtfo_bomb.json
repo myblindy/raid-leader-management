@@ -1,0 +1,10 @@
+{
+  "$schema": "../schemas/mechanics_schema.json",
+  "name": "GTFO Bomb",
+  "difficulty": 40,
+  "rate": "often",
+  "targetRoles": [ "rangedDamage", "meleeDamage", "healer" ],
+  "targetCount": "few",
+  "failureCheckAffectedTargets": true,
+  "failureType": "death"
+}

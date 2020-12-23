@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
 using rlm.Support;
+using System.Text.Json.Serialization;
 
 namespace rlm.Models
 {
@@ -45,5 +46,5 @@ namespace rlm.Models
     }
 
     [Flags]
-    public enum Roles { Tank = 1 << 0, Healer = 1 << 1, MeleeDamage = 1 << 2, RangedDamage = 1 << 3 }
+    public enum Roles { None = 0, Tank = 1 << 0, Healer = 1 << 1, MeleeDamage = 1 << 2, RangedDamage = 1 << 3 }
 }
