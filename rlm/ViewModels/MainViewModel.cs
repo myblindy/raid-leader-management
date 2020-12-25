@@ -1,6 +1,7 @@
 ﻿using DynamicData;
 using ReactiveUI;
 using rlm.Models;
+using rlm.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -49,14 +50,18 @@ namespace rlm.ViewModels
         int runSpeed = 1;
         public int RunSpeed { get => runSpeed; set => this.RaiseAndSetIfChanged(ref runSpeed, value); }
 
+        public ReadOnlyObservableCollection<DailyRaidSchedule> WeeklyRaidSchedule { get; } = new(new(Enumerable.Range(0, 7).Select(idx => new DailyRaidSchedule { DayOfWeek = (DayOfWeek)idx })));
+
         public ICommand RunToggleCommand { get; }
+
+        readonly Simulator simulator;
 
         public ViewModelActivator Activator { get; } = new();
 
         public MainViewModel()
         {
-            Raiders.AddRange(Raider.CreateRaiders(tankRange: 2..5, healerRange: 7..12, damageDealerRange: 25..35, traitRange: 0..4, ilvlRange: 45..65, GlobalState));
-            Raids.Add(new(encounters: 6..12, encounterMechanics: 2..6, GlobalState));
+            Raiders.AddRange(Raider.CreateRaiders(tankRange: 2..5, healerRange: 13..18, damageDealerRange: 25..35, traitRange: 0..4, ilvlRange: 45..65, GlobalState));
+            Raids.Add(Enumerable.Range(0, 3).Select(_ => new Raid(ilvl: 60, encounters: 6..12, encounterMechanics: 2..6, encounterDurationSeconds: 200..400, GlobalState)));
 
             this.WhenActivated(disposables =>
             {
@@ -87,6 +92,17 @@ namespace rlm.ViewModels
             });
 
             RunToggleCommand = ReactiveCommand.Create(() => Running = !Running);
+
+            WeeklyRaidSchedule[(int)DayOfWeek.Saturday].Hours = 5;
+            simulator = new(this);
         }
+    }
+
+    public class DailyRaidSchedule : ReactiveObject
+    {
+        public DayOfWeek DayOfWeek { get; init; }
+
+        int hours;
+        public int Hours { get => hours; set => this.RaiseAndSetIfChanged(ref hours, value); }
     }
 }

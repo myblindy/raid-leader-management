@@ -10,7 +10,10 @@
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                <TextBlock Text="{Binding CurrentDate, StringFormat='Date: {0:yyyy-MM-dd}'}" VerticalAlignment="Center"/>
+                <TextBlock VerticalAlignment="Center">
+                    <Run Text="{Binding CurrentDate, StringFormat='Date: {0:dddd}'}"/>
+                    <Run Text="{Binding CurrentDate, StringFormat=yyyy-MM-dd}"/>
+                </TextBlock>
                 <TextBlock Text="{Binding RunSpeed, StringFormat='Speed: {0}'}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                 <Slider Value="{Binding RunSpeed}" Minimum="1" Maximum="5" TickFrequency="1" Width="50" />
                 <Button Content="{Binding Running, Converter={StaticResource RunningToButtonTextConverter}}" Command="{Binding RunToggleCommand}" Margin="8,0,0,0" />
@@ -176,6 +179,25 @@
                         </ItemsControl>
                     </StackPanel>
                 </DockPanel>
+            </TabItem>
+            <TabItem Header="Schedule">
+                <ItemsControl ItemsSource="{Binding WeeklyRaidSchedule}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="10" Padding="10" Background="{Binding Hours, Converter={StaticResource RaidHoursToBrushConverter}}">
+                                <StackPanel Orientation="Vertical" >
+                                    <TextBlock TextAlignment="Center" Margin="0,0,0,20" FontSize="14" Text="{Binding DayOfWeek}" Foreground="White"/>
+                                    <TextBlock TextAlignment="Center" FontSize="20" Text="{Binding Hours}" Foreground="White"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </TabItem>
         </TabControl>
     </DockPanel>

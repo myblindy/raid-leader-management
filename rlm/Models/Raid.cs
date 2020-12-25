@@ -14,16 +14,22 @@ namespace rlm.Models
     {
         public string Name { get; set; }
         public Encounter[] Encounters { get; init; }
+        public int RequiredRaiders => 40;
+        public int RequiredTanks => 3;
+        public int RequiredHealers => 12;
+        public int BaseItemLevel { get; }
 
         public Raid() { }
-        public Raid(Range encounters, Range encounterMechanics, GlobalState globalState)
+        public Raid(int ilvl, Range encounters, Range encounterMechanics, Range encounterDurationSeconds, GlobalState globalState)
         {
+            BaseItemLevel = ilvl;
             Name = globalState.Random.Next(globalState.AllEncounterNames);
             Encounters = new Encounter[globalState.Random.Next(encounters)];
             for (int encIdx = 0; encIdx < Encounters.Length; ++encIdx)
                 Encounters[encIdx] = new Encounter
                 {
                     Name = globalState.Random.Next(globalState.AllEncounterNames),
+                    Duration = TimeSpan.FromSeconds(globalState.Random.Next(encounterDurationSeconds)),
                     EncounterMechanics = globalState.Random.Next(globalState.AllEncounterMechanics, encounterMechanics).ToArray()
                 };
         }
@@ -32,6 +38,7 @@ namespace rlm.Models
     public class Encounter
     {
         public string Name { get; set; }
+        public TimeSpan Duration { get; set; }
         public EncounterMechanic[] EncounterMechanics { get; init; }
     }
 
@@ -57,7 +64,7 @@ namespace rlm.Models
 
     }
 
-    public enum EncounterMechanicRate { VeryRare, Rare, Normal, Often, VeryOften }
+    public enum EncounterMechanicRate { VeryOften, Often, Normal, Rare, VeryRare }
     public enum EncounterTargetCount { One, All, Few, Many }
     public enum EncounterFailureType { Death, DifficultyIncrease }
 }

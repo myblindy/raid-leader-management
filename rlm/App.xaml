@@ -7,5 +7,6 @@
         <converters:NameToImageSourceConverter x:Key="NameToImageSourceConverter"/>
         <converters:VisibleIfNonZeroConverter x:Key="VisibleIfNonZeroConverter"/>
         <converters:RunningToButtonTextConverter x:Key="RunningToButtonTextConverter"/>
+        <converters:RaidHoursToBrushConverter x:Key="RaidHoursToBrushConverter"/>
     </Application.Resources>
 </Application>
