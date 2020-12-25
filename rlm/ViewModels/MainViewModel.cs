@@ -52,6 +52,10 @@ namespace rlm.ViewModels
 
         public ReadOnlyObservableCollection<DailyRaidSchedule> WeeklyRaidSchedule { get; } = new(new(Enumerable.Range(0, 7).Select(idx => new DailyRaidSchedule { DayOfWeek = (DayOfWeek)idx })));
 
+        public Dictionary<(EncounterMechanic mechanic, Raider raider), double> RaiderMechanicTraining { get; } = new();
+
+        public ObservableCollection<ActivityLogEntry> ActivityLog { get; } = new();
+
         public ICommand RunToggleCommand { get; }
 
         readonly Simulator simulator;
@@ -60,7 +64,7 @@ namespace rlm.ViewModels
 
         public MainViewModel()
         {
-            Raiders.AddRange(Raider.CreateRaiders(tankRange: 2..5, healerRange: 13..18, damageDealerRange: 25..35, traitRange: 0..4, ilvlRange: 45..65, GlobalState));
+            Raiders.AddRange(Raider.CreateRaiders(tankRange: 3..6, healerRange: 13..18, damageDealerRange: 25..35, traitRange: 0..4, ilvlRange: 45..65, GlobalState));
             Raids.Add(Enumerable.Range(0, 3).Select(_ => new Raid(ilvl: 60, encounters: 6..12, encounterMechanics: 2..6, encounterDurationSeconds: 200..400, GlobalState)));
 
             this.WhenActivated(disposables =>
@@ -104,5 +108,9 @@ namespace rlm.ViewModels
 
         int hours;
         public int Hours { get => hours; set => this.RaiseAndSetIfChanged(ref hours, value); }
+    }
+
+    public record ActivityLogEntry(DateTime Date, string Entry)
+    {
     }
 }

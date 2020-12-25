@@ -21,6 +21,23 @@
             <StackPanel Orientation="Horizontal"/>
         </DockPanel>
 
+        <GroupBox DockPanel.Dock="Right" Header="Log">
+            <ListBox ItemsSource="{Binding ActivityLog}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0:yyyy-MM-dd} {1}">
+                                    <Binding Path="Date"/>
+                                    <Binding Path="Entry"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+
         <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
             <StatusBarItem DockPanel.Dock="Right">
                 <TextBlock Text="{Binding RangedDamageCount, StringFormat='Ranged DDs: {0}'}"/>

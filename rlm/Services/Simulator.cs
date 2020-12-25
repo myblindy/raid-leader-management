@@ -28,7 +28,12 @@ namespace rlm.Services
         {
             var speeds = new[] { TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(0) };
             var raidTick = TimeSpan.FromSeconds(10);
-            var baseSuccessChance = .95;
+            const double baseSuccessChance = .95;
+            const double trainingSuccess = .2, trainingFailure = 1;
+            const double deathAddedDifficulty = 30;
+
+            void AddLogEntry(ActivityLogEntry entry) =>
+                dispatcher.BeginInvoke(() => vm.ActivityLog.Add(entry));
 
             while (true)
             {
@@ -40,6 +45,8 @@ namespace rlm.Services
                 var raidHoursToday = TimeSpan.FromHours(vm.WeeklyRaidSchedule[(int)vm.CurrentDate.DayOfWeek].Hours);
                 if (raidHoursToday.TotalHours > 0)
                 {
+                    var wipesCount = 0;
+
                     foreach (var raid in vm.Raids)
                     {
                         // build the group based on raid requirements
@@ -55,11 +62,16 @@ namespace rlm.Services
                                 (roles.HasFlag(Roles.MeleeDamage) && r.Specialization.Role == Roles.MeleeDamage) ||
                                 (roles.HasFlag(Roles.RangedDamage) && r.Specialization.Role == Roles.RangedDamage));
 
+                        double GetTraining(EncounterMechanic mechanic, Raider raider) =>
+                            vm.RaiderMechanicTraining.TryGetValue((mechanic, raider), out var val) ? val : vm.RaiderMechanicTraining[(mechanic, raider)] = 0;
+
+                        AddLogEntry(new(vm.CurrentDate, $"Raid on {raid.Name} started."));
                         foreach (var encounter in raid.Encounters)
                         {
                         wipe:
                             // healers can't dps
                             var encounterDuration = encounter.Duration * (raid.BaseItemLevel / raiders.Where(r => r.Specialization.Role != Roles.Healer).Average(r => r.AverageItemLevel));
+                            var maxEncounterDuration = encounterDuration;
 
                             double extraDifficulty = 0;
 
@@ -90,8 +102,14 @@ namespace rlm.Services
                                         var failureCheckRaiders = failureCheckRaidersEnumerable.ToList();
 
                                         // check who failed
-                                        var raidersWhoFailed = failureCheckRaiders.Where(r => 
-                                            vm.GlobalState.Random.NextDouble() < r.AverageItemLevel / raid.BaseItemLevel * baseSuccessChance * (mechanic.Difficulty + extraDifficulty) / 100.0).ToList();
+                                        var raidersWhoFailed = failureCheckRaiders.Where(r =>
+                                            vm.GlobalState.Random.NextDouble() < r.AverageItemLevel / raid.BaseItemLevel * baseSuccessChance * (mechanic.Difficulty + extraDifficulty - GetTraining(mechanic, r)) / 100.0)
+                                            .ToHashSet();
+
+                                        // train the mechanic for the raiders who tested against it
+                                        failureCheckRaiders.ForEach(r => vm.RaiderMechanicTraining[(mechanic, r)] += raidersWhoFailed.Contains(r) ? trainingFailure : trainingSuccess);
+
+                                        // and apply the failures, if any
                                         if (raidersWhoFailed.Any())
                                         {
                                             switch (mechanic.FailureType)
@@ -100,8 +118,12 @@ namespace rlm.Services
                                                     if (targetRaiders.Any(r => r.Specialization.Role == Roles.Tank))
                                                     {
                                                         // tank died, it's a wipe
+                                                        ++wipesCount;
                                                         goto wipe;
                                                     }
+
+                                                    // it's gonna suck for the survivors even if a tank didn't die
+                                                    extraDifficulty += deathAddedDifficulty * raidersWhoFailed.Count;
                                                     break;
                                                 case EncounterFailureType.DifficultyIncrease:
                                                     extraDifficulty += mechanic.FailureDifficultyIncrease;
@@ -116,11 +138,15 @@ namespace rlm.Services
                             }
 
                             // boss dead!!
-                            continue;
+                            AddLogEntry(new(vm.CurrentDate, $"Encounter {encounter.Name} in raid {raid.Name} defeated after {maxEncounterDuration} and {wipesCount} wipes."));
+                            wipesCount = 0;
                         }
+
+                        AddLogEntry(new(vm.CurrentDate, $"Raid on {raid.Name} ended."));
                     }
 
-                raidEnd: { }
+                raidEnd:
+                    AddLogEntry(new(vm.CurrentDate, $"Raiding for the day is ended."));
                 }
 
                 // next day
