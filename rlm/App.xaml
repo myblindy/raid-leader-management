@@ -8,5 +8,6 @@
         <converters:VisibleIfNonZeroConverter x:Key="VisibleIfNonZeroConverter"/>
         <converters:RunningToButtonTextConverter x:Key="RunningToButtonTextConverter"/>
         <converters:RaidHoursToBrushConverter x:Key="RaidHoursToBrushConverter"/>
+        <converters:IndexStringToStringConverter x:Key="IndexStringToStringConverter"/>
     </Application.Resources>
 </Application>

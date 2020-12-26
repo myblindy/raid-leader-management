@@ -64,8 +64,8 @@ namespace rlm.ViewModels
 
         public MainViewModel()
         {
-            Raiders.AddRange(Raider.CreateRaiders(tankRange: 3..6, healerRange: 13..18, damageDealerRange: 25..35, traitRange: 0..4, ilvlRange: 45..65, GlobalState));
-            Raids.Add(Enumerable.Range(0, 3).Select(_ => new Raid(ilvl: 60, encounters: 6..12, encounterMechanics: 2..6, encounterDurationSeconds: 200..400, GlobalState)));
+            Raiders.AddRange(Raider.CreateRaiders(tankRange: 3..6, healerRange: 13..18, damageDealerRange: 25..35, traitRange: 0..4, ilvlRange: 40..55, GlobalState));
+            Raids.Add(Enumerable.Range(0, 3).Select(idx => new Raid(ilvl: 60 + idx * 8, encounters: 6..12, encounterMechanics: 2..6, encounterDurationSeconds: 200..400, GlobalState)));
 
             this.WhenActivated(disposables =>
             {
@@ -97,7 +97,7 @@ namespace rlm.ViewModels
 
             RunToggleCommand = ReactiveCommand.Create(() => Running = !Running);
 
-            WeeklyRaidSchedule[(int)DayOfWeek.Saturday].Hours = 5;
+            WeeklyRaidSchedule[(int)DayOfWeek.Friday].Hours = 5;
             simulator = new(this);
         }
     }
@@ -110,7 +110,15 @@ namespace rlm.ViewModels
         public int Hours { get => hours; set => this.RaiseAndSetIfChanged(ref hours, value); }
     }
 
-    public record ActivityLogEntry(DateTime Date, string Entry)
-    {
-    }
+    public abstract record ActivityLogEntry(DateTime Date) { }
+
+    public record RaidStartActivityLogEntry(DateTime Date, Raid Raid) : ActivityLogEntry(Date);
+
+    public record RaidEndActivityLogEntry(DateTime Date, Raid Raid) : ActivityLogEntry(Date);
+
+    public record RaidDayEndActivityLogEntry(DateTime Date) : ActivityLogEntry(Date);
+
+    public record LootRaiderPair(Loot Loot, Raider Raider);
+
+    public record RaidEncounterCompletedActivityLogEntry(DateTime Date, Raid Raid, Encounter Encounter, TimeSpan TimeSpent, int WipesCount, IList<LootRaiderPair> LootRaiderPairs) : ActivityLogEntry(Date);
 }

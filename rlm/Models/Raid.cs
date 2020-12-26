@@ -12,14 +12,13 @@ namespace rlm.Models
 {
     public class Raid
     {
-        public string Name { get; set; }
+        public string Name { get; init; }
         public Encounter[] Encounters { get; init; }
         public int RequiredRaiders => 40;
         public int RequiredTanks => 3;
         public int RequiredHealers => 12;
         public int BaseItemLevel { get; }
 
-        public Raid() { }
         public Raid(int ilvl, Range encounters, Range encounterMechanics, Range encounterDurationSeconds, GlobalState globalState)
         {
             BaseItemLevel = ilvl;
@@ -30,17 +29,50 @@ namespace rlm.Models
                 {
                     Name = globalState.Random.Next(globalState.AllEncounterNames),
                     Duration = TimeSpan.FromSeconds(globalState.Random.Next(encounterDurationSeconds)),
+                    Raid = this,
                     EncounterMechanics = globalState.Random.Next(globalState.AllEncounterMechanics, encounterMechanics).ToArray()
                 };
+
+            // generate the loot
+            {
+                var loot = new List<Loot>();
+
+                // all armor
+                foreach (var armorType in Enum.GetValues<ArmorType>())
+                    for (int slotIdx = 0; slotIdx < Raider.MaxArmorSlots; ++slotIdx)
+                        for (int copies = globalState.Random.Next(2, 7); copies >= 0; --copies)
+                            loot.Add(new ArmorLoot(BaseItemLevel, armorType, slotIdx));
+
+                // distribute the loot
+                var encIdx = 0;
+                while (loot.Any())
+                {
+                    var lootIdx = globalState.Random.Next(loot.Count);
+                    Encounters[encIdx].PossibleLoot.Add(loot[lootIdx]);
+                    loot.RemoveAt(lootIdx);
+                    encIdx = ++encIdx % Encounters.Length;
+                }
+            }
         }
     }
 
     public class Encounter
     {
-        public string Name { get; set; }
-        public TimeSpan Duration { get; set; }
+        public string Name { get; init; }
+        public TimeSpan Duration { get; init; }
+        public Raid Raid { get; init; }
         public EncounterMechanic[] EncounterMechanics { get; init; }
+        public List<Loot> PossibleLoot { get; } = new();
+
+        public IEnumerable<Loot> GenerateLootDrops(GlobalState globalState)
+        {
+            for (int lootIndex = globalState.Random.Next(2, 5); lootIndex >= 0; --lootIndex)
+                yield return globalState.Random.Next(PossibleLoot);
+        }
     }
+
+    public abstract record Loot(int ItemLevel) { }
+    public record ArmorLoot(int ItemLevel, ArmorType ArmorType, int SlotIndex) : Loot(ItemLevel) { }
 
     public class EncounterMechanic
     {

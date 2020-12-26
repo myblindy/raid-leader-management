@@ -9,6 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
+using static MoreLinq.Extensions.MinByExtension;
+
 namespace rlm.Services
 {
     class Simulator
@@ -65,13 +67,14 @@ namespace rlm.Services
                         double GetTraining(EncounterMechanic mechanic, Raider raider) =>
                             vm.RaiderMechanicTraining.TryGetValue((mechanic, raider), out var val) ? val : vm.RaiderMechanicTraining[(mechanic, raider)] = 0;
 
-                        AddLogEntry(new(vm.CurrentDate, $"Raid on {raid.Name} started."));
+                        AddLogEntry(new RaidStartActivityLogEntry(vm.CurrentDate, raid));
                         foreach (var encounter in raid.Encounters)
                         {
+                            var timeSpent = new TimeSpan();
+
                         wipe:
                             // healers can't dps
                             var encounterDuration = encounter.Duration * (raid.BaseItemLevel / raiders.Where(r => r.Specialization.Role != Roles.Healer).Average(r => r.AverageItemLevel));
-                            var maxEncounterDuration = encounterDuration;
 
                             double extraDifficulty = 0;
 
@@ -135,18 +138,44 @@ namespace rlm.Services
                                 // advance time
                                 if ((raidHoursToday -= raidTick).Ticks <= 0)
                                     goto raidEnd;
+                                timeSpent += raidTick;
                             }
 
                             // boss dead!!
-                            AddLogEntry(new(vm.CurrentDate, $"Encounter {encounter.Name} in raid {raid.Name} defeated after {maxEncounterDuration} and {wipesCount} wipes."));
+                            {
+                                var wipesCountCopy = wipesCount;
+
+                                // generate loot and assign it to the people with the lowest ilvl in that slot
+                                var lootRaiderPairs = new List<LootRaiderPair>();
+                                foreach (var loot in encounter.GenerateLootDrops(vm.GlobalState))
+                                {
+                                    switch (loot)
+                                    {
+                                        case ArmorLoot armorLoot:
+                                            var raider = raiders.Except(lootRaiderPairs.Select(w => w.Raider))
+                                                .Where(r => r.Specialization.ArmorType == armorLoot.ArmorType && r.ArmorSlots[armorLoot.SlotIndex] < armorLoot.ItemLevel)
+                                                .MinBy(r => r.ArmorSlots[armorLoot.SlotIndex])
+                                                .FirstOrDefault();
+                                            if (raider is not null)
+                                                lootRaiderPairs.Add(new(loot, raider));
+                                            break;
+                                        default: throw new NotImplementedException();
+                                    }
+                                }
+
+                                // the actual loot transfer has to happen on the main thread, synchronizing the two threads
+                                dispatcher.Invoke(() => lootRaiderPairs.ForEach(w => w.Raider.ArmorSlots[((ArmorLoot)w.Loot).SlotIndex] = w.Loot.ItemLevel));
+
+                                AddLogEntry(new RaidEncounterCompletedActivityLogEntry(vm.CurrentDate, raid, encounter, timeSpent, wipesCountCopy, lootRaiderPairs));
+                            }
                             wipesCount = 0;
                         }
 
-                        AddLogEntry(new(vm.CurrentDate, $"Raid on {raid.Name} ended."));
+                        AddLogEntry(new RaidEndActivityLogEntry(vm.CurrentDate, raid));
                     }
 
                 raidEnd:
-                    AddLogEntry(new(vm.CurrentDate, $"Raiding for the day is ended."));
+                    AddLogEntry(new RaidDayEndActivityLogEntry(vm.CurrentDate));
                 }
 
                 // next day

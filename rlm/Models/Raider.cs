@@ -29,9 +29,12 @@ namespace rlm.Models
         Specialization spec;
         public Specialization Specialization { get => spec; set => this.RaiseAndSetIfChanged(ref spec, value); }
 
-        public ObservableCollection<int> WeaponSlots { get; } = new(Enumerable.Repeat(0, 2));
-        public ObservableCollection<int> ArmorSlots { get; } = new(Enumerable.Repeat(0, 8));
-        public ObservableCollection<int> OtherSlots { get; } = new(Enumerable.Repeat(0, 6));
+        public const int MaxWeaponSlots = 2;
+        public ObservableCollection<int> WeaponSlots { get; } = new(Enumerable.Repeat(0, MaxWeaponSlots));
+        public const int MaxArmorSlots = 8;
+        public ObservableCollection<int> ArmorSlots { get; } = new(Enumerable.Repeat(0, MaxArmorSlots));
+        public const int MaxOtherSlots = 6;
+        public ObservableCollection<int> OtherSlots { get; } = new(Enumerable.Repeat(0, MaxOtherSlots));
 
         public double AverageItemLevel { get; private set; }
 

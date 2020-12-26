@@ -18,6 +18,11 @@ namespace rlm.Models
 
         public string[] AllEncounterNames { get; }
 
+        public string[] ArmorEquipmentSlotNames { get; } = new[]
+        {
+            "Head", "Shoulders", "Chest", "Wrist", "Hands", "Waist", "Legs", "Feet", 
+        };
+
         public Random Random { get; } = new();
 
         public GlobalState(IEnumerable<Trait> traits, IEnumerable<Class> classes, IEnumerable<string> userNames, IEnumerable<string> encounterNames, IEnumerable<EncounterMechanic> encounterMechanics)
