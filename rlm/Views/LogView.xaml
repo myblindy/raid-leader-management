@@ -1,20 +1,9 @@
-﻿<UserControl x:Class="rlm.Views.LogView"
+﻿<UserControl x:Class="rlm.Views.LogView" x:Name="RootView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewmodels="clr-namespace:rlm.ViewModels">
     <ListBox ItemsSource="{Binding ActivityLog}">
         <ListBox.Resources>
-            <Style x:Key="DateStyle" TargetType="{x:Type Run}">
-                <Setter Property="Foreground" Value="LightGray"/>
-            </Style>
-            <Style x:Key="HighlightStyle" TargetType="{x:Type Run}">
-                <Setter Property="Foreground" Value="MediumPurple"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-            </Style>
-            <Style x:Key="NumberStyle" TargetType="{x:Type Run}">
-                <Setter Property="Foreground" Value="Gray"/>
-            </Style>
-
             <DataTemplate DataType="{x:Type viewmodels:RaidStartActivityLogEntry}">
                 <TextBlock>
                     <Run Style="{StaticResource DateStyle}" Text="{Binding Date, StringFormat='[{0:yyMMdd}]'}"/>
@@ -37,39 +26,41 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewmodels:RaidEncounterCompletedActivityLogEntry}">
-                <StackPanel Orientation="Vertical">
-                    <TextBlock>
-                        <Run Style="{StaticResource DateStyle}" Text="{Binding Date, StringFormat='[{0:yyMMdd}]'}"/>
-                        Encounter <Run Style="{StaticResource HighlightStyle}" Text="{Binding Encounter.Name}"/> in raid <Run Style="{StaticResource HighlightStyle}" Text="{Binding Raid.Name}"/>
-                            has been completed in <Run Style="{StaticResource NumberStyle}" Text="{Binding TimeSpent, StringFormat=\{0:hh\\:mm\\:dd\}}"/> and 
-                            <Run Style="{StaticResource NumberStyle}" Text="{Binding WipesCount}"/> wipes.
-                    </TextBlock>
-                    <ItemsControl ItemsSource="{Binding LootRaiderPairs}" Margin="90,0,0,0">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock>
-                                    <Run Style="{StaticResource HighlightStyle}" Text="{Binding Loot.ArmorType}"/>
-                                    <Run Style="{StaticResource HighlightStyle}">
-                                        <Run.Text>
-                                            <MultiBinding Mode="OneWay" Converter="{StaticResource IndexStringToStringConverter}">
-                                                <Binding Path="Loot.SlotIndex"/>
-                                                <Binding Path="ViewModel.GlobalState.ArmorEquipmentSlotNames" ElementName="RootView"/>
-                                            </MultiBinding>
-                                        </Run.Text>
-                                    </Run>
-                                    (ilvl: <Run Style="{StaticResource NumberStyle}" Text="{Binding Loot.ItemLevel}"/>)
-                                    ->
-                                    <Run Style="{StaticResource HighlightStyle}" Text="{Binding Raider.Name}"/>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+                <ContentControl MouseDoubleClick="RaidEncounterCompletedActivityLogEntry_DoubleClick">
+                    <StackPanel>
+                        <TextBlock>
+                            <Run Style="{StaticResource DateStyle}" Text="{Binding Date, StringFormat='[{0:yyMMdd}]'}"/>
+                            Encounter <Run Style="{StaticResource HighlightStyle}" Text="{Binding Encounter.Name}"/> in raid <Run Style="{StaticResource HighlightStyle}" Text="{Binding Raid.Name}"/>
+                                has been completed in <Run Style="{StaticResource NumberStyle}" Text="{Binding TimeSpent, StringFormat=\{0:hh\\:mm\\:dd\}}"/> and 
+                                <Run Style="{StaticResource NumberStyle}" Text="{Binding WipesCount}"/> wipes.
+                        </TextBlock>
+                        <ItemsControl ItemsSource="{Binding LootRaiderPairs}" Margin="90,0,0,0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <Run Style="{StaticResource HighlightStyle}" Text="{Binding Loot.ArmorType}"/>
+                                        <Run Style="{StaticResource HighlightStyle}">
+                                            <Run.Text>
+                                                <MultiBinding Mode="OneWay" Converter="{StaticResource IndexStringToStringConverter}">
+                                                    <Binding Path="Loot.SlotIndex"/>
+                                                    <Binding Path="DataContext.GlobalState.ArmorEquipmentSlotNames" ElementName="RootView"/>
+                                                </MultiBinding>
+                                            </Run.Text>
+                                        </Run>
+                                        (ilvl: <Run Style="{StaticResource NumberStyle}" Text="{Binding Loot.ItemLevel}"/>)
+                                        ->
+                                        <Run Style="{StaticResource HighlightStyle}" Text="{Binding Raider.Name}"/>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ContentControl>
             </DataTemplate>
         </ListBox.Resources>
     </ListBox>

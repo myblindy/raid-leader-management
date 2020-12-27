@@ -1,0 +1,51 @@
+﻿<Window x:Class="rlm.Dialogs.RaidEncounterDetails" x:Name="RootView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStartupLocation="CenterOwner" WindowState="Maximized">
+    <Window.Title>
+        <MultiBinding StringFormat="{}Details for the {1} encounter in the {0} raid">
+            <Binding Path="Raid.Name"/>
+            <Binding Path="Encounter.Name"/>
+        </MultiBinding>
+    </Window.Title>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <TextBlock Margin="10,0">Date: <Run Style="{StaticResource HighlightStyle}" Text="{Binding Date, StringFormat={}{0:yyMMdd}}"/></TextBlock>
+            <TextBlock Margin="10,0">Raid: <Run Style="{StaticResource HighlightStyle}" Text="{Binding Raid.Name}"/></TextBlock>
+            <TextBlock Margin="10,0">Encounter: <Run Style="{StaticResource HighlightStyle}" Text="{Binding Encounter.Name}"/></TextBlock>
+            <TextBlock Margin="10,0">Time Spent: <Run Style="{StaticResource HighlightStyle}" Text="{Binding TimeSpent, StringFormat=\{0:hh\\:mm\\:dd\}}"/></TextBlock>
+            <TextBlock Margin="10,0">Wipes: <Run Style="{StaticResource HighlightStyle}" Text="{Binding WipesCount}"/></TextBlock>
+        </StackPanel>
+
+        <GroupBox Header="Wipers">
+            <DataGrid ItemsSource="{Binding ProcessedWipeBlameRecords, ElementName=RootView}" AutoGenerateColumns="False" IsReadOnly="True" 
+                      GridLinesVisibility="All" HeadersVisibility="Column" SelectionMode="Single" ClipboardCopyMode="IncludeHeader" ScrollViewer.CanContentScroll="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Wipe#" Binding="{Binding WipeCounter}"/>
+                    <DataGridTemplateColumn Header="Failures">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ItemsControl ItemsSource="{Binding Failures}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Vertical"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <Run Style="{StaticResource HighlightStyle}" Text="{Binding Raider.Name}"/>
+                                                failed to
+                                                <Run Style="{StaticResource HighlightStyle}" Text="{Binding Mechanic.Name}"/>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+    </DockPanel>
+</Window>

@@ -9,5 +9,16 @@
         <converters:RunningToButtonTextConverter x:Key="RunningToButtonTextConverter"/>
         <converters:RaidHoursToBrushConverter x:Key="RaidHoursToBrushConverter"/>
         <converters:IndexStringToStringConverter x:Key="IndexStringToStringConverter"/>
+
+        <Style x:Key="DateStyle" TargetType="{x:Type Run}">
+            <Setter Property="Foreground" Value="LightGray"/>
+        </Style>
+        <Style x:Key="HighlightStyle" TargetType="{x:Type Run}">
+            <Setter Property="Foreground" Value="MediumPurple"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style x:Key="NumberStyle" TargetType="{x:Type Run}">
+            <Setter Property="Foreground" Value="Gray"/>
+        </Style>
     </Application.Resources>
 </Application>

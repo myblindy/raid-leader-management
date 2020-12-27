@@ -119,6 +119,7 @@ namespace rlm.ViewModels
     public record RaidDayEndActivityLogEntry(DateTime Date) : ActivityLogEntry(Date);
 
     public record LootRaiderPair(Loot Loot, Raider Raider);
-
-    public record RaidEncounterCompletedActivityLogEntry(DateTime Date, Raid Raid, Encounter Encounter, TimeSpan TimeSpent, int WipesCount, IList<LootRaiderPair> LootRaiderPairs) : ActivityLogEntry(Date);
+    public record WipeBlameRecord(int WipeCounter, Raider Raider, EncounterMechanic Mechanic);
+    public record RaidEncounterCompletedActivityLogEntry(DateTime Date, Raid Raid, Encounter Encounter, TimeSpan TimeSpent, int WipesCount, IList<LootRaiderPair> LootRaiderPairs, IEnumerable<WipeBlameRecord> WipeBlameRecords)
+        : ActivityLogEntry(Date);
 }

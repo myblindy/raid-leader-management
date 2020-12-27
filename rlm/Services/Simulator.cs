@@ -71,6 +71,7 @@ namespace rlm.Services
                         foreach (var encounter in raid.Encounters)
                         {
                             var timeSpent = new TimeSpan();
+                            var wipeBlameRecords = new List<WipeBlameRecord>();
 
                         wipe:
                             // healers can't dps
@@ -115,6 +116,9 @@ namespace rlm.Services
                                         // and apply the failures, if any
                                         if (raidersWhoFailed.Any())
                                         {
+                                            foreach (var r in raidersWhoFailed)
+                                                wipeBlameRecords.Add(new(wipesCount, r, mechanic));
+
                                             switch (mechanic.FailureType)
                                             {
                                                 case EncounterFailureType.Death:
@@ -148,7 +152,6 @@ namespace rlm.Services
                                 // generate loot and assign it to the people with the lowest ilvl in that slot
                                 var lootRaiderPairs = new List<LootRaiderPair>();
                                 foreach (var loot in encounter.GenerateLootDrops(vm.GlobalState))
-                                {
                                     switch (loot)
                                     {
                                         case ArmorLoot armorLoot:
@@ -156,17 +159,14 @@ namespace rlm.Services
                                                 .Where(r => r.Specialization.ArmorType == armorLoot.ArmorType && r.ArmorSlots[armorLoot.SlotIndex] < armorLoot.ItemLevel)
                                                 .MinBy(r => r.ArmorSlots[armorLoot.SlotIndex])
                                                 .FirstOrDefault();
-                                            if (raider is not null)
-                                                lootRaiderPairs.Add(new(loot, raider));
+                                            lootRaiderPairs.Add(new(loot, raider));
                                             break;
                                         default: throw new NotImplementedException();
                                     }
-                                }
 
                                 // the actual loot transfer has to happen on the main thread, synchronizing the two threads
-                                dispatcher.Invoke(() => lootRaiderPairs.ForEach(w => w.Raider.ArmorSlots[((ArmorLoot)w.Loot).SlotIndex] = w.Loot.ItemLevel));
-
-                                AddLogEntry(new RaidEncounterCompletedActivityLogEntry(vm.CurrentDate, raid, encounter, timeSpent, wipesCountCopy, lootRaiderPairs));
+                                dispatcher.Invoke(() => lootRaiderPairs.ForEach(w => { if (w.Raider is not null) w.Raider.ArmorSlots[((ArmorLoot)w.Loot).SlotIndex] = w.Loot.ItemLevel; }));
+                                AddLogEntry(new RaidEncounterCompletedActivityLogEntry(vm.CurrentDate, raid, encounter, timeSpent, wipesCountCopy, lootRaiderPairs, wipeBlameRecords));
                             }
                             wipesCount = 0;
                         }

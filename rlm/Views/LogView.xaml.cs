@@ -1,4 +1,6 @@
-﻿using System;
+﻿using rlm.Dialogs;
+using rlm.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,5 +26,8 @@ namespace rlm.Views
         {
             InitializeComponent();
         }
+
+        private void RaidEncounterCompletedActivityLogEntry_DoubleClick(object sender, MouseButtonEventArgs e) =>
+            new RaidEncounterDetails((RaidEncounterCompletedActivityLogEntry)((ContentControl)sender).DataContext) { Owner = Window.GetWindow(this) }.ShowDialog();
     }
 }
