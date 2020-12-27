@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="rlm.Views.RaidsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel>
+        <StackPanel Orientation="Vertical">
+            <TextBlock>Raids:</TextBlock>
+            <ListBox x:Name="RaidsList" ItemsSource="{Binding Raids}" DisplayMemberPath="Name" />
+            <TextBlock>Encounters:</TextBlock>
+            <ListBox x:Name="EncountersList" ItemsSource="{Binding SelectedItem.Encounters, ElementName=RaidsList}" DisplayMemberPath="Name" />
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" DataContext="{Binding SelectedItem, ElementName=EncountersList}">
+            <TextBlock TextAlignment="Center">
+                The <Run Text="{Binding Name}" FontSize="14" FontWeight="Bold"/> encounter in <Run Text="{Binding SelectedItem.Name, ElementName=RaidsList}" FontSize="14" FontWeight="Bold"/>:
+            </TextBlock>
+            <ItemsControl ItemsSource="{Binding EncounterMechanics}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.ColumnSpan="3" Text="{Binding Name}" FontSize="13" FontWeight="Bold" TextAlignment="Center"/>
+
+                            <TextBlock Grid.Row="1">Difficulty:</TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Difficulty, StringFormat={}{0}%}"/>
+
+                            <TextBlock Grid.Row="1">Difficulty:</TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Difficulty, StringFormat={}{0}%}"/>
+
+                            <TextBlock Grid.Row="2">Rate:</TextBlock>
+                            <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Rate}"/>
+
+                            <TextBlock Grid.Row="3">Targets:</TextBlock>
+                            <TextBlock Grid.Row="3" Grid.Column="2"><Run Text="{Binding TargetRoles}"/> (<Run Text="{Binding TargetCount}"/>)</TextBlock>
+
+                            <TextBlock Grid.Row="4">Failure Checks:</TextBlock>
+                            <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal">
+                                <TextBlock Text="{Binding FailureCheckRoles}"/>
+                                <TextBlock Visibility="{Binding FailureCheckAffectedTargets, Converter={StaticResource VisibleIfNonZeroConverter}}">, Affected</TextBlock>
+                            </StackPanel>
+
+                            <TextBlock Grid.Row="6">Failure Type:</TextBlock>
+                            <StackPanel Grid.Row="6" Grid.Column="2" Orientation="Horizontal">
+                                <TextBlock Text="{Binding FailureType}"/>
+                                <TextBlock Visibility="{Binding FailureDifficultyIncrease, Converter={StaticResource VisibleIfNonZeroConverter}}" 
+                                                       Text="{Binding FailureDifficultyIncrease, StringFormat={}(by {0}%)}" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </DockPanel>
+</UserControl>
