@@ -44,7 +44,7 @@
                         <ItemsControl ItemsSource="{Binding Traits}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <controls:TraitImage Trait="{Binding}"/>
+                                    <controls:EntityImage Entity="{Binding}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                             <ItemsControl.ItemsPanel>

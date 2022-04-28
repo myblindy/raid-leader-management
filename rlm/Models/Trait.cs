@@ -1,4 +1,5 @@
-﻿using rlm.Support;
+﻿using ReactiveUI;
+using rlm.Support;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Text.Json;
 
 namespace rlm.Models
 {
-    public class Trait
+    public class Trait : ReactiveObject
     {
         public string Name { get; [Obsolete("Do not use setter")] set; }
         public Stats Stats { get; [Obsolete("Do not use setter.")] set; } = new();
