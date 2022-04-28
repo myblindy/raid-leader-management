@@ -17,19 +17,28 @@
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.ColumnSpan="3" Text="{Binding Name}" Margin="0,0,0,10" />
+                <TextBlock Grid.ColumnSpan="3" Margin="0,0,0,10"><Run Text="{Binding Name}" Style="{StaticResource HighlightStyle}"/></TextBlock>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" Visibility="{Binding Stats.Reflexes, Converter={StaticResource VisibleIfNonZeroConverter}}">Reflexes:</TextBlock>
-                <TextBlock Grid.Row="1" Grid.Column="1" Visibility="{Binding Stats.Reflexes, Converter={StaticResource VisibleIfNonZeroConverter}}" 
-                           Margin="10,0,0,0" Text="{Binding Stats.Reflexes}" HorizontalAlignment="Right" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Visibility="{Binding Stats.Reflexes, Converter={StaticResource VisibleIfNonZeroConverter}}">
+                    <Run Style="{StaticResource HighlightStyle}">Reflexes</Run>:
+                </TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" Visibility="{Binding Stats.Reflexes, Converter={StaticResource VisibleIfNonZeroConverter}}" Margin="10,0,0,0" HorizontalAlignment="Right">
+                    <Run Text="{Binding Stats.Reflexes}" Style="{StaticResource NumberStyle}"></Run>
+                </TextBlock>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Visibility="{Binding Stats.Intelligence, Converter={StaticResource VisibleIfNonZeroConverter}}">Intelligence:</TextBlock>
-                <TextBlock Grid.Row="2" Grid.Column="1" Visibility="{Binding Stats.Intelligence, Converter={StaticResource VisibleIfNonZeroConverter}}" 
-                           Margin="10,0,0,0" Text="{Binding Stats.Intelligence}" HorizontalAlignment="Right" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Visibility="{Binding Stats.Intelligence, Converter={StaticResource VisibleIfNonZeroConverter}}">
+                    <Run Style="{StaticResource HighlightStyle}">Intelligence</Run>:
+                </TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" Visibility="{Binding Stats.Intelligence, Converter={StaticResource VisibleIfNonZeroConverter}}" Margin="10,0,0,0" HorizontalAlignment="Right">
+                    <Run Text="{Binding Stats.Intelligence}" Style="{StaticResource NumberStyle}"></Run>
+                </TextBlock>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Visibility="{Binding Stats.Charisma, Converter={StaticResource VisibleIfNonZeroConverter}}">Charisma:</TextBlock>
-                <TextBlock Grid.Row="2" Grid.Column="1" Visibility="{Binding Stats.Charisma, Converter={StaticResource VisibleIfNonZeroConverter}}" 
-                           Margin="10,0,0,0" Text="{Binding Stats.Charisma}" HorizontalAlignment="Right" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Visibility="{Binding Stats.Charisma, Converter={StaticResource VisibleIfNonZeroConverter}}">
+                    <Run Style="{StaticResource HighlightStyle}">Charisma</Run>:
+                </TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" Visibility="{Binding Stats.Charisma, Converter={StaticResource VisibleIfNonZeroConverter}}" Margin="10,0,0,0" HorizontalAlignment="Right">
+                    <Run Text="{Binding Stats.Charisma}" Style="{StaticResource NumberStyle}"></Run>
+                </TextBlock>
             </Grid>
         </Image.ToolTip>
     </Image>

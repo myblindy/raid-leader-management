@@ -3,11 +3,11 @@
 namespace rlm.Views
 {
     /// <summary>
-    /// Interaction logic for RaidsView.xaml
+    /// Interaction logic for ClassesView.xaml
     /// </summary>
-    public partial class RaidsView : UserControl
+    public partial class ClassesView : UserControl
     {
-        public RaidsView()
+        public ClassesView()
         {
             InitializeComponent();
         }

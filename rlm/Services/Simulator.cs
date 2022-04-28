@@ -4,12 +4,8 @@ using rlm.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Threading;
-
-using static MoreLinq.Extensions.MinByExtension;
 
 namespace rlm.Services
 {
@@ -59,10 +55,10 @@ namespace rlm.Services
 
                         IEnumerable<Raider> RaidersWithRoles(Roles roles) =>
                             raiders.Where(r =>
-                                (roles.HasFlag(Roles.Tank) && r.Specialization.Role == Roles.Tank) ||
-                                (roles.HasFlag(Roles.Healer) && r.Specialization.Role == Roles.Healer) ||
-                                (roles.HasFlag(Roles.MeleeDamage) && r.Specialization.Role == Roles.MeleeDamage) ||
-                                (roles.HasFlag(Roles.RangedDamage) && r.Specialization.Role == Roles.RangedDamage));
+                                roles.HasFlag(Roles.Tank) && r.Specialization.Role == Roles.Tank ||
+                                roles.HasFlag(Roles.Healer) && r.Specialization.Role == Roles.Healer ||
+                                roles.HasFlag(Roles.MeleeDamage) && r.Specialization.Role == Roles.MeleeDamage ||
+                                roles.HasFlag(Roles.RangedDamage) && r.Specialization.Role == Roles.RangedDamage);
 
                         double GetTraining(EncounterMechanic mechanic, Raider raider) =>
                             vm.RaiderMechanicTraining.TryGetValue((mechanic, raider), out var val) ? val : vm.RaiderMechanicTraining[(mechanic, raider)] = 0;
@@ -157,8 +153,7 @@ namespace rlm.Services
                                         case ArmorLoot armorLoot:
                                             var raider = raiders.Except(lootRaiderPairs.Select(w => w.Raider))
                                                 .Where(r => r.Specialization.ArmorType == armorLoot.ArmorType && r.ArmorSlots[armorLoot.SlotIndex] < armorLoot.ItemLevel)
-                                                .MinBy(r => r.ArmorSlots[armorLoot.SlotIndex])
-                                                .FirstOrDefault();
+                                                .MinBy(r => r.ArmorSlots[armorLoot.SlotIndex]);
                                             lootRaiderPairs.Add(new(loot, raider));
                                             break;
                                         default: throw new NotImplementedException();

@@ -8,8 +8,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace rlm.ViewModels
