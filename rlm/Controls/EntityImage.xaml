@@ -8,8 +8,15 @@
              x:Name="RootView">
     <ContentPresenter Content="{Binding Entity, ElementName=RootView}">
         <ContentPresenter.Resources>
+            <DataTemplate DataType="{x:Type models:Roles}">
+                <Image Source="{Binding Converter={StaticResource NameToImageSourceConverter}}" MaxHeight="{StaticResource EntityImageSize}" MaxWidth="{StaticResource EntityImageSize}">
+                    <Image.ToolTip>
+                        <TextBlock><Run Text="{Binding Mode=OneWay}" Style="{StaticResource HighlightStyle}"/></TextBlock>
+                    </Image.ToolTip>
+                </Image>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type models:Trait}">
-                <Image Source="{Binding Name, Converter={StaticResource NameToImageSourceConverter}}" Width="24" Height="24">
+                <Image Source="{Binding Name, Converter={StaticResource NameToImageSourceConverter}}" MaxHeight="{StaticResource EntityImageSize}" MaxWidth="{StaticResource EntityImageSize}">
                     <Image.ToolTip>
                         <Grid d:DataContext="{d:DesignInstance Type=models:Trait}">
                             <Grid.ColumnDefinitions>

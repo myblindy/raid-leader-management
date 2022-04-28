@@ -17,7 +17,7 @@
             <DataGridTemplateColumn Header="Role" SortMemberPath="Specialization.Role">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <Image Source="{Binding Specialization.Role, Converter={StaticResource NameToImageSourceConverter}}" MaxHeight="24"/>
+                        <controls:EntityImage Entity="{Binding Specialization.Role}"/>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
