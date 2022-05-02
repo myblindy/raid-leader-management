@@ -23,6 +23,8 @@
             <Setter Property="Foreground" Value="Gray"/>
         </Style>
 
+        <SolidColorBrush x:Key="SeparatorColorBrush">LightGray</SolidColorBrush>
+
         <system:Double x:Key="EntityImageSize">32</system:Double>
         <system:Double x:Key="LargeFontSize">20</system:Double>
     </Application.Resources>

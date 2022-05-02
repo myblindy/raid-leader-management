@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="ReactiveUI" Version="13.0.27" />
     <PackageReference Include="ReactiveUI.WPF" Version="13.0.27" />
+    <ProjectReference Include="..\rlm.roslyn\rlm.roslyn\rlm.roslyn.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
 
   <ItemGroup>

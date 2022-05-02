@@ -7,7 +7,7 @@
              xmlns:viewmodels="clr-namespace:rlm.ViewModels" xmlns:controls="clr-namespace:rlm.Controls"
              d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
              mc:Ignorable="d">
-    <ItemsControl ItemsSource="{Binding GlobalState.AllClasses}">
+    <ItemsControl ItemsSource="{Binding GlobalState.AllClasses}" HorizontalAlignment="Center">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <WrapPanel Orientation="Horizontal"/>
@@ -15,28 +15,35 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Vertical" Margin="10">
-                    <TextBlock HorizontalAlignment="Center" FontSize="{StaticResource LargeFontSize}"><Run Text="{Binding Name}" Style="{StaticResource HighlightStyle}"/></TextBlock>
-                    <ItemsControl ItemsSource="{Binding Specializations}" Margin="10">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" Grid.IsSharedSizeScope="True"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition SharedSizeGroup="ColumnOne"/>
-                                        <ColumnDefinition Width="auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <controls:EntityImage Grid.Column="0" Entity="{Binding Role}"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+                <Border BorderBrush="{StaticResource SeparatorColorBrush}" BorderThickness="0,0,1,0">
+                    <StackPanel Orientation="Vertical" Margin="10">
+                        <TextBlock HorizontalAlignment="Center" FontSize="{StaticResource LargeFontSize}"><Run Text="{Binding Name}" Style="{StaticResource HighlightStyle}"/></TextBlock>
+                        <ItemsControl ItemsSource="{Binding Specializations}" Margin="10">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" Grid.IsSharedSizeScope="True"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="0"/>
+                                            <ColumnDefinition SharedSizeGroup="1"/>
+                                            <ColumnDefinition SharedSizeGroup="2"/>
+                                        </Grid.ColumnDefinitions>
+                                        <controls:EntityImage Grid.Column="0" Entity="{Binding Role}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                            <controls:EntityImage Entity="{Binding MainHandWeaponType}"/>
+                                            <controls:EntityImage Entity="{Binding OffHandWeaponType}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>

@@ -32,8 +32,20 @@
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
             <DataGridTextColumn Header="Armor Type" Binding="{Binding Specialization.ArmorType}" ElementStyle="{StaticResource LeftCellStyle}" />
-            <DataGridTextColumn Header="Right Weapon" Binding="{Binding Specialization.MainHandWeaponType}" ElementStyle="{StaticResource LeftCellStyle}" />
-            <DataGridTextColumn Header="Left Weapon" Binding="{Binding Specialization.OffHandWeaponType}" ElementStyle="{StaticResource LeftCellStyle}" />
+            <DataGridTemplateColumn Header="Main" SortMemberPath="Specialization.MainHandWeaponType">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <controls:EntityImage Entity="{Binding Specialization.MainHandWeaponType}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="Off" SortMemberPath="Specialization.OffHandWeaponType">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <controls:EntityImage Entity="{Binding Specialization.OffHandWeaponType}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
             <DataGridTextColumn Header="ILvl" Binding="{Binding AverageItemLevel, StringFormat=0.0}" ElementStyle="{StaticResource RightCellStyle}" />
             <DataGridTextColumn Header="Reflexes" Binding="{Binding TotalStats.Reflexes}" ElementStyle="{StaticResource RightCellStyle}" />
             <DataGridTextColumn Header="Intelligence" Binding="{Binding TotalStats.Intelligence}" ElementStyle="{StaticResource RightCellStyle}" />
@@ -44,7 +56,7 @@
                         <ItemsControl ItemsSource="{Binding Traits}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <controls:EntityImage Entity="{Binding}"/>
+                                    <controls:EntityImage Entity="{Binding ConverterParameter=Traits}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                             <ItemsControl.ItemsPanel>

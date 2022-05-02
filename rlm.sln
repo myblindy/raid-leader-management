@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30503.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32414.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rlm", "rlm\rlm.csproj", "{A01F973E-EA0D-4058-906F-317CA40BA1BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rlm", "rlm\rlm.csproj", "{A01F973E-EA0D-4058-906F-317CA40BA1BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rlm.roslyn", "rlm.roslyn\rlm.roslyn\rlm.roslyn.csproj", "{525F5CB4-C23A-4681-9B71-67D4D342990C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rlm.roslyn.Test", "rlm.roslyn\rlm.roslyn.Test\rlm.roslyn.Test.csproj", "{E0B50567-624D-488D-843E-4E07F109D6B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "roslyn", "roslyn", "{2EBDA27C-B66B-4A9F-9A32-C4C2C76BF8B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +21,20 @@ Global
 		{A01F973E-EA0D-4058-906F-317CA40BA1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A01F973E-EA0D-4058-906F-317CA40BA1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A01F973E-EA0D-4058-906F-317CA40BA1BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{525F5CB4-C23A-4681-9B71-67D4D342990C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{525F5CB4-C23A-4681-9B71-67D4D342990C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{525F5CB4-C23A-4681-9B71-67D4D342990C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{525F5CB4-C23A-4681-9B71-67D4D342990C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0B50567-624D-488D-843E-4E07F109D6B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0B50567-624D-488D-843E-4E07F109D6B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0B50567-624D-488D-843E-4E07F109D6B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{525F5CB4-C23A-4681-9B71-67D4D342990C} = {2EBDA27C-B66B-4A9F-9A32-C4C2C76BF8B6}
+		{E0B50567-624D-488D-843E-4E07F109D6B9} = {2EBDA27C-B66B-4A9F-9A32-C4C2C76BF8B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {057A7AD9-0760-4AB5-8FFF-70C671F10BB0}
